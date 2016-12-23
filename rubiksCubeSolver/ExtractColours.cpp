@@ -57,18 +57,11 @@ ExtractColours::ExtractColours()
 			}
 		}
 
-		//else if (cv::waitKey(20) == 'n') {
-		//
-		//	currentFaceNum++;
-
-		//	cv::Mat Snap;
-		//	cv::Mat Colour;
-		//	Cap >> Snap;
-		//	Colour = Snap.clone();
-
-		//	_getSmallCubeHSV(Snap);				//the user pressed 'S' means he is ready to get the HSV values.
-		//	_getSmallCubeColour(Colour);
-		//}
+		//once we scan all the 6 faces correctly we will exit out of the loop
+		if ((currentFaceNum + 1) > 6) {
+			
+			break;
+		}
 
 		//indicate the face number on the frame
 		std::stringstream ss;
@@ -107,7 +100,7 @@ void ExtractColours::_getSmallCubeHSV(cv::Mat &Snap){
 
 	//convert the the colour scheme of the frame for better reception of colour
 	cv::cvtColor(Snap, HSVFrame,CV_BGR2HSV);
-	cv::imshow("HSV",HSVFrame);
+	//cv::imshow("HSV",HSVFrame);
 
 	//The H,S,V vectors
 	std::vector<int> HVec, SVec, VVec;
@@ -194,12 +187,20 @@ void ExtractColours::_displaySmallCubeColour(cv::Mat &Colour) {
 					cv::putText(Colour, "W", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 				}
 
-				else if (avgH[i][j] <= 90) {	//Green
-				
+				else if (avgH[i][j] >= 70 && avgH[i][j] <= 90) {	//Green
+
+					if (avgS[i][j] >= 235) {
+						cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
+					}
+					
+					else
 					cv::putText(Colour, "G", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 				}
+				else if ((avgH[i][j]>40 && avgH[i][j]<70) || (avgH[i][j] > 90 && avgH[i][j] <= 97)) {
+					cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
+				}
 
-				else if (avgH[i][j] > 95 && avgH[i][j] <= 105) {
+				else if (avgH[i][j] > 97 && avgH[i][j] <= 102) {
 					
 					/*if (avgS[i][j] >= 235) {*/
 					
@@ -211,7 +212,7 @@ void ExtractColours::_displaySmallCubeColour(cv::Mat &Colour) {
 					//	cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 					//}
 				}
-				else if (avgH[i][j] > 105) {//Red
+				else if (avgH[i][j] > 102) {//Red
 					cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 				}
 				
@@ -280,14 +281,28 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 					
 				}
 
-				else if (avgH[i][j] <= 90) {	//Green
-					Colours[netIndex] = 'G';
-					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
-					index++;
+				else if (avgH[i][j]>=70 && avgH[i][j] <= 90) {	//Green
+					if (avgS[i][j] >= 235) {
+						Colours[netIndex] = 'R';
+						std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+						index++;
+					}
+					
+					else {
+					
+						Colours[netIndex] = 'G';
+						std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+						index++;
+					}
 					
 				}
-
-				else if (avgH[i][j] > 95 && avgH[i][j] <= 105) {
+				else if ((avgH[i][j]>40 && avgH[i][j]<70)||(avgH[i][j] > 90 && avgH[i][j] <= 97)) {
+				
+					Colours[netIndex] = 'R';
+					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+					index++;
+				}
+				else if (avgH[i][j] > 97 && avgH[i][j] <= 102) {
 
 					/*if (avgS[i][j] >= 235) {*/
 						Colours[netIndex] = 'B';
@@ -303,7 +318,7 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 					//	index++;
 					//}
 				}
-				else if (avgH[i][j] > 105) {//Red
+				else if (avgH[i][j] > 102) {//Red
 					Colours[netIndex] = 'R';
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
@@ -314,6 +329,8 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 	}
 
 }
+
+
 //ExtractColours::~ExtractColours()
 //{
 //}
