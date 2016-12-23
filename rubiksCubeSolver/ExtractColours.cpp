@@ -73,7 +73,7 @@ ExtractColours::ExtractColours()
 		//indicate the face number on the frame
 		std::stringstream ss;
 		ss << (currentFaceNum+1);
-		cv::putText(_frame, "Scan Face " + ss.str(), cv::Point(100, 400), 2, 2, cv::Scalar(125, 0, 125), 2, 8);
+		cv::putText(_frame, "Scan Face " + ss.str(), cv::Point(100, 470), 2, 2, cv::Scalar(125, 0, 125), 2, 8);
 
 		cv::imshow("ExtractColours", _frame);
 		cv::waitKey(10);
@@ -155,7 +155,7 @@ void ExtractColours::_getSmallCubeHSV(cv::Mat &Snap){
 			SVec.clear();
 			VVec.clear();
 			
-			//std::cout << "Colour " << i << j << " H= " << avgH[i][j] << " S= " << avgS[i][j] << " V= " << avgV[i][j] << "\n";
+			std::cout << "Colour " << i << j << " H= " << avgH[i][j] << " S= " << avgS[i][j] << " V= " << avgV[i][j] << "\n";
 
 		}
 	}
@@ -169,12 +169,22 @@ void ExtractColours::_displaySmallCubeColour(cv::Mat &Colour) {
 		for (int j = 0; j < 3; j++) {
 
 			//compare the H Values
-			if (avgH[i][j] >= 0 && avgH[i][j] <= 18) {	//orange colour
-				cv::putText(Colour, "O", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
+			if (avgH[i][j] >= 0 && avgH[i][j] <= 18 ) {	//orange colour
+				if (avgS[i][j] > 70) {
+				
+					cv::putText(Colour, "O", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
+				}
+				else 
+					cv::putText(Colour, "W", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 			}
 
-			else if (avgH[i][j] > 18 && avgH[i][j] <= 30) {	//yellow colour detected
-				cv::putText(Colour, "Y", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
+			else if (avgH[i][j] > 18 && avgH[i][j] <= 30 ) {	//yellow colour detected
+				if (avgS[i][j] > 70) {
+				
+					cv::putText(Colour, "Y", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
+				}
+				else 
+					cv::putText(Colour, "W", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 			}
 
 			else if (avgH[i][j] > 30 ) {
@@ -189,17 +199,17 @@ void ExtractColours::_displaySmallCubeColour(cv::Mat &Colour) {
 					cv::putText(Colour, "G", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 				}
 
-				else if (avgH[i][j] > 90 && avgH[i][j] <= 105) {
+				else if (avgH[i][j] > 95 && avgH[i][j] <= 105) {
 					
-					if (avgS[i][j] >= 235) {
+					/*if (avgS[i][j] >= 235) {*/
 					
 						cv::putText(Colour, "B", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 
-					}
+					/*}*/
 
-					else /*if (avgS[i][j] < 230)*/ {
-						cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
-					}
+					//else /*if (avgS[i][j] < 230)*/ {
+					//	cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
+					//}
 				}
 				else if (avgH[i][j] > 105) {//Red
 					cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
@@ -226,15 +236,39 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 
 			//compare the H Values
 			if (avgH[i][j] >= 0 && avgH[i][j] <= 18) {	//orange colour
-				Colours[netIndex] = 'O';
-				std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
-				index++;
+				
+				if (avgS[i][j] > 70) {
+				
+					Colours[netIndex] = 'O';
+					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+					index++;
+				}
+
+				else {
+					Colours[netIndex] = 'W';
+					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+					index++;
+
+				}
+
 			}
 
 			else if (avgH[i][j] > 18 && avgH[i][j] <= 30) {	//yellow colour detected
-				Colours[netIndex] = 'Y';
-				std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
-				index++;
+				
+				if (avgS[i][j] > 70) {
+				
+					Colours[netIndex] = 'Y';
+					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+					index++;
+				}
+
+				else {
+				
+					Colours[netIndex] = 'W';
+					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+					index++;
+				}
+
 			}
 
 			else if (avgH[i][j] > 30) {
@@ -253,21 +287,21 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 					
 				}
 
-				else if (avgH[i][j] > 90 && avgH[i][j] <= 105) {
+				else if (avgH[i][j] > 95 && avgH[i][j] <= 105) {
 
-					if (avgS[i][j] >= 235) {
+					/*if (avgS[i][j] >= 235) {*/
 						Colours[netIndex] = 'B';
 						std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 						index++;
 						
 
-					}
+					/*}*/
 
-					else /*if (avgS[i][j] < 230)*/ {
-						Colours[netIndex] = 'R';
-						std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
-						index++;
-					}
+					//else /*if (avgS[i][j] < 230)*/ {
+					//	Colours[netIndex] = 'R';
+					//	std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
+					//	index++;
+					//}
 				}
 				else if (avgH[i][j] > 105) {//Red
 					Colours[netIndex] = 'R';
