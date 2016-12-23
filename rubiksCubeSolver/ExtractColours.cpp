@@ -148,7 +148,7 @@ void ExtractColours::_getSmallCubeHSV(cv::Mat &Snap){
 			SVec.clear();
 			VVec.clear();
 			
-			std::cout << "Colour " << i << j << " H= " << avgH[i][j] << " S= " << avgS[i][j] << " V= " << avgV[i][j] << "\n";
+			//std::cout << "Colour " << i << j << " H= " << avgH[i][j] << " S= " << avgS[i][j] << " V= " << avgV[i][j] << "\n";
 
 		}
 	}
