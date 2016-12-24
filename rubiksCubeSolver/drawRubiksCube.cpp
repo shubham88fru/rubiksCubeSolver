@@ -309,40 +309,111 @@ GLfloat color[][3] = { { 1.0,1.0,1.0 },		//white ..top
 };
 
 //////////////////////////////////////////////////////////
-int _getColourAtIndex(int index) {
+void _getFrontFaceColours(int startIndex) {
 
-	switch (_scrambledCubeColours[index]) {
-
-	case 'W':
-		return 0;
-		break;
-
-	case 'B':
-		return 2;
-		break;
-
-	case 'O':
-		return 1;
-		break;
-
-	case 'R':
-		return 5;
-		break;
-
-	case 'G':
-		return 3;
-		break;
-
-	case 'Y':
-		return 4;
-		break;
-
-	default:
-		//std::cout << "Error!!!Exiting the pgr..\n";
-		break;
+	for (int i = 0; i < 3; i++) {
+	
+		for (int j = 0; j < 3; j++) {
+		
+			front[i][j] = _scrambledCubeColours[startIndex];
+			startIndex++;
+		}
 	}
 }
 
+void _getRightFaceColours(int startIndex) {
+
+	for (int i = 0; i < 3; i++) {
+
+		for (int j = 0; j < 3; j++) {
+
+			right[i][j] = _scrambledCubeColours[startIndex];
+			startIndex++;
+		}
+	}
+}
+
+void _getLeftFaceColours(int startIndex) {
+
+	for (int i = 0; i < 3; i++) {
+
+		for (int j = 0; j < 3; j++) {
+
+			left[i][j] = _scrambledCubeColours[startIndex];
+			startIndex++;
+		}
+	}
+}
+
+void _getBackFaceColours(int startIndex) {
+
+	for (int i = 0; i < 3; i++) {
+
+		for (int j = 0; j < 3; j++) {
+
+			back[i][j] = _scrambledCubeColours[startIndex];
+			startIndex++;
+		}
+	}
+}
+
+void _getTopFaceColours(int startIndex) {
+
+	for (int i = 0; i < 3; i++) {
+
+		for (int j = 0; j < 3; j++) {
+
+			top[i][j] = _scrambledCubeColours[startIndex];
+			startIndex++;
+		}
+	}
+}
+
+void _getBottomFaceColours(int startIndex) {
+
+	for (int i = 0; i < 3; i++) {
+
+		for (int j = 0; j < 3; j++) {
+
+			bottom[i][j] = _scrambledCubeColours[startIndex];
+			startIndex++;
+		}
+	}
+}
+
+//int _getColourAtIndex(int index) {
+//
+//	//switch (_scrambledCubeColours[index]) {
+//
+//	//case 'W':
+//	//	return 0;
+//	//	break;
+//
+//	//case 'B':
+//	//	return 2;
+//	//	break;
+//
+//	//case 'O':
+//	//	return 1;
+//	//	break;
+//
+//	//case 'R':
+//	//	return 5;
+//	//	break;
+//
+//	//case 'G':
+//	//	return 3;
+//	//	break;
+//
+//	//case 'Y':
+//	//	return 4;
+//	//	break;
+//
+//	//default:
+//	//	//std::cout << "Error!!!Exiting the pgr..\n";
+//	//	break;
+//	//}
+//}
 
 
 void _output(int x, int y, char* string) {
@@ -395,7 +466,7 @@ void _colorcube2()
 	_polygon(6, 8, 12, 15, 11);    // bottom center
 	_polygon(6, 9, 10, 14, 13);
 	_polygon(6, 12, 13, 14, 15);
-	_polygon(/*bottom[1][1]*/_getColourAtIndex(50), 8, 9, 13, 12);
+	_polygon(bottom[1][1]/*_getColourAtIndex(50)*/, 8, 9, 13, 12);
 
 
 }
@@ -405,7 +476,7 @@ void _colorcube3()
 
 	_polygon(6, 16, 19, 18, 17);
 	_polygon(6, 18, 19, 23, 22);
-	_polygon(/*left[1][1]*/_getColourAtIndex(23), 16, 20, 23, 19);    // left center
+	_polygon(left[1][1]/*_getColourAtIndex(23)*/, 16, 20, 23, 19);    // left center
 	_polygon(6, 17, 18, 22, 21);
 	_polygon(6, 20, 21, 22, 23);
 	_polygon(6, 16, 17, 21, 20);
@@ -418,7 +489,7 @@ void _colorcube4()
 	_polygon(6, 24, 27, 26, 25);
 	_polygon(6, 26, 27, 31, 30);
 	_polygon(6, 24, 28, 31, 27);    // right center
-	_polygon(/*right[1][1]*/_getColourAtIndex(14), 25, 26, 30, 29);
+	_polygon(right[1][1]/*_getColourAtIndex(14)*/, 25, 26, 30, 29);
 	_polygon(6, 28, 29, 30, 31);
 	_polygon(6, 24, 25, 29, 28);
 
@@ -428,7 +499,7 @@ void _colorcube4()
 void _colorcube5()
 {
 	_polygon(6, 32, 35, 34, 33);
-	_polygon(/*top[1][1]*/_getColourAtIndex(41), 34, 35, 39, 38);
+	_polygon(top[1][1]/*_getColourAtIndex(41)*/, 34, 35, 39, 38);
 	_polygon(6, 32, 36, 39, 35);    // top center
 	_polygon(6, 33, 34, 38, 37);
 	_polygon(6, 36, 37, 38, 39);
@@ -443,7 +514,7 @@ void _colorcube6()
 	_polygon(6, 42, 43, 47, 46);
 	_polygon(6, 40, 44, 47, 43);    // front center
 	_polygon(6, 41, 42, 46, 45);
-	_polygon(/*front[1][1]*/_getColourAtIndex(5), 44, 45, 46, 47);
+	_polygon(front[1][1]/*_getColourAtIndex(5)*/, 44, 45, 46, 47);
 	_polygon(6, 40, 41, 45, 44);
 
 
@@ -451,7 +522,7 @@ void _colorcube6()
 
 void _colorcube7()
 {
-	_polygon(/*back[1][1]*/_getColourAtIndex(32), 48, 51, 50, 49);
+	_polygon(back[1][1]/*_getColourAtIndex(32)*/, 48, 51, 50, 49);
 	_polygon(6, 50, 51, 55, 54);
 	_polygon(6, 48, 52, 55, 51);    //back center
 	_polygon(6, 49, 50, 54, 53);
@@ -465,8 +536,8 @@ void _colorcube7()
 void _colorcube8()
 {
 	_polygon(6, 56, 59, 58, 57);
-	_polygon(/*top[1][0]*/_getColourAtIndex(40), 58, 59, 63, 62);
-	_polygon(/*left[0][1]*/_getColourAtIndex(20), 56, 60, 63, 59);    // top left center
+	_polygon(top[1][0]/*_getColourAtIndex(40)*/, 58, 59, 63, 62);
+	_polygon(left[0][1]/*_getColourAtIndex(20)*/, 56, 60, 63, 59);    // top left center
 	_polygon(6, 57, 58, 62, 61);
 	_polygon(6, 60, 61, 62, 63);
 	_polygon(6, 56, 57, 61, 60);
@@ -477,9 +548,9 @@ void _colorcube8()
 void _colorcube9()
 {
 	_polygon(6, 64, 67, 66, 65);
-	_polygon(/*top[1][2]*/_getColourAtIndex(42), 66, 67, 71, 70);
+	_polygon(top[1][2]/*_getColourAtIndex(42)*/, 66, 67, 71, 70);
 	_polygon(6, 64, 68, 71, 67);    // top right center
-	_polygon(/*right[0][1]*/_getColourAtIndex(11), 65, 66, 70, 69);
+	_polygon(right[0][1]/*_getColourAtIndex(11)*/, 65, 66, 70, 69);
 	_polygon(6, 68, 69, 70, 71);
 	_polygon(6, 64, 65, 69, 68);
 
@@ -489,10 +560,10 @@ void _colorcube9()
 void _colorcube10()
 {
 	_polygon(6, 72, 75, 74, 73);
-	_polygon(/*top[2][1]*/_getColourAtIndex(44), 74, 75, 79, 78);
+	_polygon(top[2][1]/*_getColourAtIndex(44)*/, 74, 75, 79, 78);
 	_polygon(6, 72, 76, 79, 75);    // top front center
 	_polygon(6, 73, 74, 78, 77);
-	_polygon(/*front[0][1]*/_getColourAtIndex(2), 76, 77, 78, 79);
+	_polygon(front[0][1]/*_getColourAtIndex(2)*/, 76, 77, 78, 79);
 	_polygon(6, 72, 73, 77, 76);
 
 
@@ -500,8 +571,8 @@ void _colorcube10()
 
 void _colorcube11()
 {
-	_polygon(/*back[0][1]*/_getColourAtIndex(29), 80, 83, 82, 81);
-	_polygon(/*top[0][1]*/_getColourAtIndex(38), 82, 83, 87, 86);
+	_polygon(back[0][1]/*_getColourAtIndex(29)*/, 80, 83, 82, 81);
+	_polygon(top[0][1]/*_getColourAtIndex(38)*/, 82, 83, 87, 86);
 	_polygon(6, 80, 84, 87, 83);    // top back center
 	_polygon(6, 81, 82, 86, 85);
 	_polygon(6, 84, 85, 86, 87);
@@ -514,10 +585,10 @@ void _colorcube12()
 {
 	_polygon(6, 80 + 8, 83 + 8, 82 + 8, 81 + 8);
 	_polygon(6, 82 + 8, 83 + 8, 87 + 8, 86 + 8);
-	_polygon(/*left[2][1]*/_getColourAtIndex(26), 80 + 8, 84 + 8, 87 + 8, 83 + 8);    // bottom left center
+	_polygon(left[2][1]/*_getColourAtIndex(26)*/, 80 + 8, 84 + 8, 87 + 8, 83 + 8);    // bottom left center
 	_polygon(6, 81 + 8, 82 + 8, 86 + 8, 85 + 8);
 	_polygon(6, 84 + 8, 85 + 8, 86 + 8, 87 + 8);
-	_polygon(/*bottom[1][0]*/_getColourAtIndex(49), 80 + 8, 81 + 8, 85 + 8, 84 + 8);
+	_polygon(bottom[1][0]/*_getColourAtIndex(49)*/, 80 + 8, 81 + 8, 85 + 8, 84 + 8);
 
 
 }
@@ -527,9 +598,9 @@ void _colorcube13()
 	_polygon(6, 80 + 16, 83 + 16, 82 + 16, 81 + 16);
 	_polygon(6, 82 + 16, 83 + 16, 87 + 16, 86 + 16);
 	_polygon(6, 80 + 16, 84 + 16, 87 + 16, 83 + 16);    // bottom right center
-	_polygon(/*right[2][1]*/_getColourAtIndex(17), 81 + 16, 82 + 16, 86 + 16, 85 + 16);
+	_polygon(right[2][1]/*_getColourAtIndex(17)*/, 81 + 16, 82 + 16, 86 + 16, 85 + 16);
 	_polygon(6, 84 + 16, 85 + 16, 86 + 16, 87 + 16);
-	_polygon(/*bottom[1][2]*/_getColourAtIndex(51), 80 + 16, 81 + 16, 85 + 16, 84 + 16);
+	_polygon(bottom[1][2]/*_getColourAtIndex(51)*/, 80 + 16, 81 + 16, 85 + 16, 84 + 16);
 
 
 }
@@ -540,28 +611,28 @@ void _colorcube14()
 	_polygon(6, 82 + 24, 83 + 24, 87 + 24, 86 + 24);
 	_polygon(6, 80 + 24, 84 + 24, 87 + 24, 83 + 24);    // bottom front center
 	_polygon(6, 81 + 24, 82 + 24, 86 + 24, 85 + 24);
-	_polygon(/*front[2][1]*/_getColourAtIndex(8), 84 + 24, 85 + 24, 86 + 24, 87 + 24);
-	_polygon(/*bottom[0][1]*/_getColourAtIndex(47), 80 + 24, 81 + 24, 85 + 24, 84 + 24);
+	_polygon(front[2][1]/*_getColourAtIndex(8)*/, 84 + 24, 85 + 24, 86 + 24, 87 + 24);
+	_polygon(bottom[0][1]/*_getColourAtIndex(47)*/, 80 + 24, 81 + 24, 85 + 24, 84 + 24);
 
 
 }
 void _colorcube15()
 {
-	_polygon(/*back[2][1]*/_getColourAtIndex(35), 112, 115, 114, 113);
+	_polygon(back[2][1]/*_getColourAtIndex(35)*/, 112, 115, 114, 113);
 	_polygon(6, 114, 115, 119, 118);
 	_polygon(6, 112, 116, 119, 115);    // bottom back center
 	_polygon(6, 113, 114, 118, 117);
 	_polygon(6, 116, 117, 118, 119);
-	_polygon(/*bottom[2][1]*/_getColourAtIndex(53), 112, 113, 117, 116);
+	_polygon(bottom[2][1]/*_getColourAtIndex(53)*/, 112, 113, 117, 116);
 
 
 }
 
 void _colorcube16()
 {
-	_polygon(/*back[0][2]*/_getColourAtIndex(30), 120, 123, 122, 121);
-	_polygon(/*top[0][0]*/_getColourAtIndex(37), 122, 123, 127, 126);
-	_polygon(/*left[0][0]*/_getColourAtIndex(19), 120, 124, 127, 123);    // top left back
+	_polygon(back[0][2]/*_getColourAtIndex(30)*/, 120, 123, 122, 121);
+	_polygon(top[0][0]/*_getColourAtIndex(37)*/, 122, 123, 127, 126);
+	_polygon(left[0][0]/*_getColourAtIndex(19)*/, 120, 124, 127, 123);    // top left back
 	_polygon(6, 121, 122, 126, 125);
 	_polygon(6, 124, 125, 126, 127);
 	_polygon(6, 120, 121, 125, 124);
@@ -572,10 +643,10 @@ void _colorcube16()
 void _colorcube17()
 {
 	_polygon(6, 128, 131, 130, 129);
-	_polygon(/*top[2][0]*/_getColourAtIndex(43), 130, 131, 135, 134);
-	_polygon(/*left[0][2]*/_getColourAtIndex(21), 128, 132, 135, 131);    // top left front
+	_polygon(top[2][0]/*_getColourAtIndex(43)*/, 130, 131, 135, 134);
+	_polygon(left[0][2]/*_getColourAtIndex(21)*/, 128, 132, 135, 131);    // top left front
 	_polygon(6, 129, 130, 134, 133);
-	_polygon(/*front[0][0]*/_getColourAtIndex(1), 132, 133, 134, 135);
+	_polygon(front[0][0]/*_getColourAtIndex(1)*/, 132, 133, 134, 135);
 	_polygon(6, 128, 129, 133, 132);
 
 
@@ -584,10 +655,10 @@ void _colorcube17()
 
 void _colorcube18()
 {
-	_polygon(/*back[0][0]*/_getColourAtIndex(28), 136, 139, 138, 137);
-	_polygon(/*top[0][2]*/_getColourAtIndex(39), 138, 139, 143, 142);
+	_polygon(back[0][0]/*_getColourAtIndex(28)*/, 136, 139, 138, 137);
+	_polygon(top[0][2]/*_getColourAtIndex(39)*/, 138, 139, 143, 142);
 	_polygon(6, 136, 140, 143, 139);    // top right back
-	_polygon(/*right[0][2]*/_getColourAtIndex(12), 137, 138, 142, 141);
+	_polygon(right[0][2]/*_getColourAtIndex(12)*/, 137, 138, 142, 141);
 	_polygon(6, 140, 141, 142, 143);
 	_polygon(6, 136, 137, 141, 140);
 
@@ -598,10 +669,10 @@ void _colorcube18()
 void _colorcube19()
 {
 	_polygon(6, 144, 147, 146, 145);
-	_polygon(/*top[2][2]*/_getColourAtIndex(45), 146, 147, 151, 150);
+	_polygon(top[2][2]/*_getColourAtIndex(45)*/, 146, 147, 151, 150);
 	_polygon(6, 144, 148, 151, 147);    // top right front
-	_polygon(/*right[0][0]*/_getColourAtIndex(10), 145, 146, 150, 149);
-	_polygon(/*front[0][2]*/_getColourAtIndex(3), 148, 149, 150, 151);
+	_polygon(right[0][0]/*_getColourAtIndex(10)*/, 145, 146, 150, 149);
+	_polygon(front[0][2]/*_getColourAtIndex(3)*/, 148, 149, 150, 151);
 	_polygon(6, 144, 145, 149, 148);
 
 
@@ -609,9 +680,9 @@ void _colorcube19()
 
 void _colorcube20()
 {
-	_polygon(/*back[1][2]*/_getColourAtIndex(33), 152, 155, 154, 153);
+	_polygon(back[1][2]/*_getColourAtIndex(33)*/, 152, 155, 154, 153);
 	_polygon(6, 154, 155, 159, 158);
-	_polygon(/*left[1][0]*/_getColourAtIndex(22), 152, 156, 159, 155);    //center left back
+	_polygon(left[1][0]/*_getColourAtIndex(22)*/, 152, 156, 159, 155);    //center left back
 	_polygon(6, 153, 154, 158, 157);
 	_polygon(6, 156, 157, 158, 159);
 	_polygon(6, 152, 153, 157, 156);
@@ -623,9 +694,9 @@ void _colorcube21()
 {
 	_polygon(6, 160, 163, 162, 161);
 	_polygon(6, 162, 163, 167, 166);
-	_polygon(/*left[1][2]*/_getColourAtIndex(24), 160, 164, 167, 163);    // center left front
+	_polygon(left[1][2]/*_getColourAtIndex(24)*/, 160, 164, 167, 163);    // center left front
 	_polygon(6, 161, 162, 166, 165);
-	_polygon(/*front[1][0]*/_getColourAtIndex(4), 164, 165, 166, 167);
+	_polygon(front[1][0]/*_getColourAtIndex(4)*/, 164, 165, 166, 167);
 	_polygon(6, 160, 161, 165, 164);
 
 
@@ -634,10 +705,10 @@ void _colorcube21()
 
 void _colorcube22()
 {
-	_polygon(/*back[1][0]*/_getColourAtIndex(31), 168, 171, 170, 169);
+	_polygon(back[1][0]/*_getColourAtIndex(31)*/, 168, 171, 170, 169);
 	_polygon(6, 170, 171, 175, 174);
 	_polygon(6, 168, 172, 175, 171);    // center right back
-	_polygon(/*right[1][2]*/_getColourAtIndex(15), 169, 170, 174, 173);
+	_polygon(right[1][2]/*_getColourAtIndex(15)*/, 169, 170, 174, 173);
 	_polygon(6, 172, 173, 174, 175);
 	_polygon(6, 168, 169, 173, 172);
 
@@ -650,8 +721,8 @@ void _colorcube23()
 	_polygon(6, 176, 179, 178, 177);
 	_polygon(6, 178, 179, 183, 182);
 	_polygon(6, 176, 180, 183, 179);    //center right front
-	_polygon(/*right[1][0]*/_getColourAtIndex(13), 177, 178, 182, 181);
-	_polygon(/*front[1][2]*/_getColourAtIndex(6), 180, 181, 182, 183);
+	_polygon(right[1][0]/*_getColourAtIndex(13)*/, 177, 178, 182, 181);
+	_polygon(front[1][2]/*_getColourAtIndex(6)*/, 180, 181, 182, 183);
 	_polygon(6, 176, 177, 181, 180);
 
 
@@ -659,12 +730,12 @@ void _colorcube23()
 
 void _colorcube24()
 {
-	_polygon(/*back[2][2]*/_getColourAtIndex(36), 184, 187, 186, 185);
+	_polygon(back[2][2]/*_getColourAtIndex(54)*/, 184, 187, 186, 185);
 	_polygon(6, 186, 187, 191, 190);
-	_polygon(/*left[2][0]*/_getColourAtIndex(25), 184, 188, 191, 187);    // bottom left back
+	_polygon(left[2][0]/*_getColourAtIndex(25)*/, 184, 188, 191, 187);    // bottom left back
 	_polygon(6, 185, 186, 190, 189);
 	_polygon(6, 188, 189, 190, 191);
-	_polygon(/*bottom[2][0]*/_getColourAtIndex(52), 184, 185, 189, 188);
+	_polygon(bottom[2][0]/*_getColourAtIndex(52)*/, 184, 185, 189, 188);
 
 
 }
@@ -672,22 +743,22 @@ void _colorcube25()
 {
 	_polygon(6, 192, 195, 194, 193);
 	_polygon(6, 194, 195, 199, 198);
-	_polygon(/*left[2][2]*/_getColourAtIndex(27), 192, 196, 199, 195);    // bottom left front
+	_polygon(left[2][2]/*_getColourAtIndex(27)*/, 192, 196, 199, 195);    // bottom left front
 	_polygon(6, 193, 194, 198, 197);
-	_polygon(/*front[2][0]*/_getColourAtIndex(7), 196, 197, 198, 199);
-	_polygon(/*bottom[0][0]*/_getColourAtIndex(46), 192, 193, 197, 196);
+	_polygon(front[2][0]/*_getColourAtIndex(7)*/, 196, 197, 198, 199);
+	_polygon(bottom[0][0]/*_getColourAtIndex(46)*/, 192, 193, 197, 196);
 
 
 }
 
 void _colorcube26()
 {
-	_polygon(/*back[2][0]*/_getColourAtIndex(34), 200, 203, 202, 201);
+	_polygon(back[2][0]/*_getColourAtIndex(34)*/, 200, 203, 202, 201);
 	_polygon(6, 202, 203, 207, 206);
 	_polygon(6, 200, 204, 207, 203);    // bottom right back
-	_polygon(/*right[2][2]*/_getColourAtIndex(18), 201, 202, 206, 205);
+	_polygon(right[2][2]/*_getColourAtIndex(18),*/, 201, 202, 206, 205);
 	_polygon(6, 204, 205, 206, 207);
-	_polygon(/*bottom[2][2]*/_getColourAtIndex(54), 200, 201, 205, 204);
+	_polygon(bottom[2][2]/*_getColourAtIndex(54)*/, 200, 201, 205, 204);
 
 
 }
@@ -697,9 +768,9 @@ void _colorcube27()
 	_polygon(6, 208, 211, 210, 209);
 	_polygon(6, 210, 211, 215, 214);
 	_polygon(6, 208, 212, 215, 211);    // bottom right front
-	_polygon(/*right[2][0]*/_getColourAtIndex(16), 209, 210, 214, 213);
-	_polygon(/*front[2][2]*/_getColourAtIndex(9), 212, 213, 214, 215);
-	_polygon(/*bottom[0][2]*/_getColourAtIndex(48), 208, 209, 213, 212);
+	_polygon(right[2][0]/*_getColourAtIndex(16)*/, 209, 210, 214, 213);
+	_polygon(front[2][2]/*_getColourAtIndex(9),*/, 212, 213, 214, 215);
+	_polygon(bottom[0][2]/*_getColourAtIndex(48)*/, 208, 209, 213, 212);
 
 
 }
@@ -1852,13 +1923,19 @@ void _mymenu(int id)
 	}
 
 }
-void drawRubiksCube::drawCube(int argc, char* argv[], char* colourArray, int size) {
+void drawRubiksCube::drawCube(int argc, char* argv[], /*char*/ int* colourArray, int size) {
 
 	//copy the colours for the scrambled cube.
-	for (int i = 1; i < size; i++) {
+	for (int i = 1; i <= size; i++) {
 	
 		_scrambledCubeColours[i] = colourArray[i];
 	}
+	_getFrontFaceColours(1);
+	_getRightFaceColours(10);
+	_getLeftFaceColours(19);
+	_getBackFaceColours(28);
+	_getTopFaceColours(37);
+	_getBottomFaceColours(46);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

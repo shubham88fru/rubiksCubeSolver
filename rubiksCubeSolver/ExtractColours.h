@@ -14,7 +14,7 @@ class ExtractColours
 {
 public:
 
-	char Colours[54];						//store the initials of the colours detected.
+	/*char*/  int Colours[54];						//store the initials of the colours detected.
 
 	ExtractColours();
 	//~ExtractColours();    //dont need the destructor for the time being!

@@ -10,7 +10,7 @@ class drawRubiksCube
 public:
 	
 	//drawRubiksCube(/*int argc, char* argv[]*/);
-	void drawCube(int argc, char* argv[],char* colourArray,int size);
+	void drawCube(int argc, char* argv[],/*char*/ int* colourArray,int size);
 	//~drawRubiksCube();
 
 private:

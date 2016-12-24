@@ -189,7 +189,7 @@ void ExtractColours::_displaySmallCubeColour(cv::Mat &Colour) {
 
 				else if (avgH[i][j] >= 70 && avgH[i][j] <= 90) {	//Green
 
-					if (avgS[i][j] >= 235) {
+					if (avgS[i][j] >= 240) {
 						cv::putText(Colour, "R", cv::Point(_smallCubes[j][i].x + (smallCubeLength / 2), _smallCubes[j][i].y + (smallCubeLength / 2)), 1, 1.1, cv::Scalar(0, 0, 0), 2, 8);
 					}
 					
@@ -223,6 +223,9 @@ void ExtractColours::_displaySmallCubeColour(cv::Mat &Colour) {
 	cv::imshow("Detected Colours", Colour);
 }
 
+//instead of loading the colour initials we will load the the array with
+//some integer values as per the values in drawRubiksCube.cpp
+//so that the scrambled cube can be drawn easily
 void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 
 	int index = 1;
@@ -240,13 +243,13 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 				
 				if (avgS[i][j] > 70) {
 				
-					Colours[netIndex] = 'O';
+					Colours[netIndex] = /*'O'*/ 1;
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
 				}
 
 				else {
-					Colours[netIndex] = 'W';
+					Colours[netIndex] = /*'W'*/ 0;
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
 
@@ -258,14 +261,14 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 				
 				if (avgS[i][j] > 70) {
 				
-					Colours[netIndex] = 'Y';
+					Colours[netIndex] = /*'Y'*/ 4;
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
 				}
 
 				else {
 				
-					Colours[netIndex] = 'W';
+					Colours[netIndex] = /*'W'*/ 0;
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
 				}
@@ -275,22 +278,22 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 			else if (avgH[i][j] > 30) {
 
 				if (avgS[i][j] >= 0 && avgS[i][j] <= 100) {	//White
-					Colours[netIndex] = 'W';
+					Colours[netIndex] = /*'W'*/ 0;
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
 					
 				}
 
 				else if (avgH[i][j]>=70 && avgH[i][j] <= 90) {	//Green
-					if (avgS[i][j] >= 235) {
-						Colours[netIndex] = 'R';
+					if (avgS[i][j] >= 240) {
+						Colours[netIndex] = /*'R'*/ 5;
 						std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 						index++;
 					}
 					
 					else {
 					
-						Colours[netIndex] = 'G';
+						Colours[netIndex] = /*'G'*/ 3;
 						std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 						index++;
 					}
@@ -298,14 +301,14 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 				}
 				else if ((avgH[i][j]>40 && avgH[i][j]<70)||(avgH[i][j] > 90 && avgH[i][j] <= 97)) {
 				
-					Colours[netIndex] = 'R';
+					Colours[netIndex] = /*'R'*/ 5;
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
 				}
 				else if (avgH[i][j] > 97 && avgH[i][j] <= 102) {
 
 					/*if (avgS[i][j] >= 235) {*/
-						Colours[netIndex] = 'B';
+						Colours[netIndex] = /*'B'*/ 2;
 						std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 						index++;
 						
@@ -319,7 +322,7 @@ void ExtractColours::_loadSmallCubeColour(/*cv::Mat &Colour*/) {
 					//}
 				}
 				else if (avgH[i][j] > 102) {//Red
-					Colours[netIndex] = 'R';
+					Colours[netIndex] = /*'R'*/ 5;
 					std::cout << "Colour " << netIndex << " = " << Colours[netIndex] << "\n";
 					index++;
 				}
