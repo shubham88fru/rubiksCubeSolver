@@ -34,7 +34,7 @@ static int speedmetercolor[15] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 static int speedmetercount = -1;
 
 //String that stores the singmaster notation of the cube
-std::string singMasterString[48];
+std::string singMasterString[67];
 int singMasterIndex = 0;
 
 
@@ -2013,6 +2013,19 @@ void drawRubiksCube::drawCube(int argc, char* argv[], /*char*/ int* colourArray,
 	for (int i = 0; i < 48; i++) {
 	
 		singMasterFile << singMasterString[i];
+
+		//put space after every two entries of the edges
+		if (i <= 23) {
+			if (i % 2 != 0) {
+			
+				singMasterFile << " ";
+			}
+
+		}
+
+		else if (i==26||i==29||i==32||i==35||i==38||i==41||i==44) {
+			singMasterFile << " ";
+		}
 	}
 
 	singMasterFile.close();
