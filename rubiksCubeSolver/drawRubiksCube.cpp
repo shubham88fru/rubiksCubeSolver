@@ -33,6 +33,11 @@ int moving = 0;
 static int speedmetercolor[15] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 static int speedmetercount = -1;
 
+//String that stores the singmaster notation of the cube
+std::string singMasterString[48];
+int singMasterIndex = 0;
+
+
 //The vertices of the 27 small cubes comprsing the bigger one
 GLfloat vertices[][3] = { { -1.0,-1.0,-1.0 },
 { 1.0,-1.0,-1.0 },
@@ -381,39 +386,42 @@ void _getBottomFaceColours(int startIndex) {
 	}
 }
 
-//int _getColourAtIndex(int index) {
-//
-//	//switch (_scrambledCubeColours[index]) {
-//
-//	//case 'W':
-//	//	return 0;
-//	//	break;
-//
-//	//case 'B':
-//	//	return 2;
-//	//	break;
-//
-//	//case 'O':
-//	//	return 1;
-//	//	break;
-//
-//	//case 'R':
-//	//	return 5;
-//	//	break;
-//
-//	//case 'G':
-//	//	return 3;
-//	//	break;
-//
-//	//case 'Y':
-//	//	return 4;
-//	//	break;
-//
-//	//default:
-//	//	//std::cout << "Error!!!Exiting the pgr..\n";
-//	//	break;
-//	//}
-//}
+void _getSingmasterString(int colourInts) {
+
+	switch (colourInts) {
+	
+	case 0:
+		singMasterString[singMasterIndex] = "U";
+		singMasterIndex++;
+		break;
+
+	case 1:
+		singMasterString[singMasterIndex] = "R";
+		singMasterIndex++;
+		break;
+
+	case 2:
+		singMasterString[singMasterIndex] = "F";
+		singMasterIndex++;
+		break;
+
+	case 3:
+		singMasterString[singMasterIndex] = "B";
+		singMasterIndex++;
+		break;
+
+	case 4:
+		singMasterString[singMasterIndex] = "D";
+		singMasterIndex++;
+		break;
+
+	case 5:
+		singMasterString[singMasterIndex] = "L";
+		singMasterIndex++;
+		break;
+	}
+}
+
 
 
 void _output(int x, int y, char* string) {
@@ -1923,7 +1931,10 @@ void _mymenu(int id)
 	}
 
 }
+
 void drawRubiksCube::drawCube(int argc, char* argv[], /*char*/ int* colourArray, int size) {
+
+	std::ofstream singMasterFile;
 
 	//copy the colours for the scrambled cube.
 	for (int i = 1; i <= size; i++) {
@@ -1936,6 +1947,75 @@ void drawRubiksCube::drawCube(int argc, char* argv[], /*char*/ int* colourArray,
 	_getBackFaceColours(28);
 	_getTopFaceColours(37);
 	_getBottomFaceColours(46);
+	
+	//call the singmaster generator
+	_getSingmasterString(top[2][1]);
+	_getSingmasterString(front[0][1]);
+	_getSingmasterString(top[1][2]);
+	_getSingmasterString(right[0][1]);
+	_getSingmasterString(top[0][1]);
+	_getSingmasterString(back[0][1]);
+	_getSingmasterString(top[1][0]);
+	_getSingmasterString(left[0][1]);
+	
+	_getSingmasterString(bottom[0][1]);
+	_getSingmasterString(front[2][1]);
+	_getSingmasterString(bottom[1][2]);
+	_getSingmasterString(right[2][1]);
+   	_getSingmasterString(bottom[2][1]);
+	_getSingmasterString(back[2][1]);
+	_getSingmasterString(bottom[1][0]);
+	_getSingmasterString(left[2][1]);
+
+	_getSingmasterString(front[1][2]);
+	_getSingmasterString(right[1][0]);
+	_getSingmasterString(front[1][0]);
+	_getSingmasterString(left[1][2]);
+	_getSingmasterString(back[1][0]);
+	_getSingmasterString(right[1][2]);
+	_getSingmasterString(back[1][2]);
+	_getSingmasterString(left[1][0]);
+
+	_getSingmasterString(top[2][2]);
+	_getSingmasterString(front[0][2]);
+	_getSingmasterString(right[0][0]);
+	
+	_getSingmasterString(top[0][2]);
+	_getSingmasterString(right[0][2]);
+	_getSingmasterString(back[0][0]);
+	
+	_getSingmasterString(top[0][0]);
+	_getSingmasterString(back[0][2]);
+	_getSingmasterString(left[0][0]);
+
+	_getSingmasterString(top[2][0]);
+	_getSingmasterString(left[0][2]);
+	_getSingmasterString(front[0][0]);
+
+	_getSingmasterString(bottom[0][2]);
+	_getSingmasterString(right[2][0]);
+	_getSingmasterString(front[2][2]);
+
+	_getSingmasterString(bottom[0][0]);
+	_getSingmasterString(front[2][0]);
+	_getSingmasterString(left[2][2]);
+
+	_getSingmasterString(bottom[2][0]);
+	_getSingmasterString(left[2][0]);
+	_getSingmasterString(back[2][2]);
+
+	_getSingmasterString(bottom[2][2]);
+	_getSingmasterString(back[2][0]);
+	_getSingmasterString(right[2][2]);
+
+
+	singMasterFile.open("singMasterData.txt");
+	for (int i = 0; i < 48; i++) {
+	
+		singMasterFile << singMasterString[i];
+	}
+
+	singMasterFile.close();
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
