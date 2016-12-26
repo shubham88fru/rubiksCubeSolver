@@ -5,9 +5,12 @@ void *font = GLUT_BITMAP_TIMES_ROMAN_24;
 char defaultMessage[] = "Rotation Speed:";
 char *message = defaultMessage;
 
-static float speed = 0.0;
+static float speed = 1.0;				//speed of rotation
 
 char _scrambledCubeColours[54];			//store the colour of the scrambled cube.
+int var = 0;							//variable that contnously calls the keyboard function
+int index = 0;							//access the elements of the moves strings
+std::string movesString;				//store the moves found by the algorithm
 
 //the unscrabled cube.
 static int top[3][3] = { { 0,0,0 },{ 0,0,0 },{ 0,0,0 } },       //white
@@ -478,7 +481,6 @@ void _colorcube2()
 
 
 }
-
 void _colorcube3()
 {
 
@@ -491,7 +493,6 @@ void _colorcube3()
 
 
 }
-
 void _colorcube4()
 {
 	_polygon(6, 24, 27, 26, 25);
@@ -503,7 +504,6 @@ void _colorcube4()
 
 
 }
-
 void _colorcube5()
 {
 	_polygon(6, 32, 35, 34, 33);
@@ -515,7 +515,6 @@ void _colorcube5()
 
 
 }
-
 void _colorcube6()
 {
 	_polygon(6, 40, 43, 42, 41);
@@ -527,7 +526,6 @@ void _colorcube6()
 
 
 }
-
 void _colorcube7()
 {
 	_polygon(back[1][1]/*_getColourAtIndex(32)*/, 48, 51, 50, 49);
@@ -539,8 +537,6 @@ void _colorcube7()
 
 
 }
-
-
 void _colorcube8()
 {
 	_polygon(6, 56, 59, 58, 57);
@@ -552,7 +548,6 @@ void _colorcube8()
 
 
 }
-
 void _colorcube9()
 {
 	_polygon(6, 64, 67, 66, 65);
@@ -564,7 +559,6 @@ void _colorcube9()
 
 
 }
-
 void _colorcube10()
 {
 	_polygon(6, 72, 75, 74, 73);
@@ -576,7 +570,6 @@ void _colorcube10()
 
 
 }
-
 void _colorcube11()
 {
 	_polygon(back[0][1]/*_getColourAtIndex(29)*/, 80, 83, 82, 81);
@@ -588,7 +581,6 @@ void _colorcube11()
 
 
 }
-
 void _colorcube12()
 {
 	_polygon(6, 80 + 8, 83 + 8, 82 + 8, 81 + 8);
@@ -600,7 +592,6 @@ void _colorcube12()
 
 
 }
-
 void _colorcube13()
 {
 	_polygon(6, 80 + 16, 83 + 16, 82 + 16, 81 + 16);
@@ -612,7 +603,6 @@ void _colorcube13()
 
 
 }
-
 void _colorcube14()
 {
 	_polygon(6, 80 + 24, 83 + 24, 82 + 24, 81 + 24);
@@ -635,7 +625,6 @@ void _colorcube15()
 
 
 }
-
 void _colorcube16()
 {
 	_polygon(back[0][2]/*_getColourAtIndex(30)*/, 120, 123, 122, 121);
@@ -647,7 +636,6 @@ void _colorcube16()
 
 
 }
-
 void _colorcube17()
 {
 	_polygon(6, 128, 131, 130, 129);
@@ -659,8 +647,6 @@ void _colorcube17()
 
 
 }
-
-
 void _colorcube18()
 {
 	_polygon(back[0][0]/*_getColourAtIndex(28)*/, 136, 139, 138, 137);
@@ -672,8 +658,6 @@ void _colorcube18()
 
 
 }
-
-
 void _colorcube19()
 {
 	_polygon(6, 144, 147, 146, 145);
@@ -685,7 +669,6 @@ void _colorcube19()
 
 
 }
-
 void _colorcube20()
 {
 	_polygon(back[1][2]/*_getColourAtIndex(33)*/, 152, 155, 154, 153);
@@ -697,7 +680,6 @@ void _colorcube20()
 
 
 }
-
 void _colorcube21()
 {
 	_polygon(6, 160, 163, 162, 161);
@@ -709,8 +691,6 @@ void _colorcube21()
 
 
 }
-
-
 void _colorcube22()
 {
 	_polygon(back[1][0]/*_getColourAtIndex(31)*/, 168, 171, 170, 169);
@@ -722,8 +702,6 @@ void _colorcube22()
 
 
 }
-
-
 void _colorcube23()
 {
 	_polygon(6, 176, 179, 178, 177);
@@ -735,7 +713,6 @@ void _colorcube23()
 
 
 }
-
 void _colorcube24()
 {
 	_polygon(back[2][2]/*_getColourAtIndex(54)*/, 184, 187, 186, 185);
@@ -758,7 +735,6 @@ void _colorcube25()
 
 
 }
-
 void _colorcube26()
 {
 	_polygon(back[2][0]/*_getColourAtIndex(34)*/, 200, 203, 202, 201);
@@ -770,7 +746,6 @@ void _colorcube26()
 
 
 }
-
 void _colorcube27()
 {
 	_polygon(6, 208, 211, 210, 209);
@@ -782,7 +757,6 @@ void _colorcube27()
 
 
 }
-
 void _speedmeter() {
 
 	glColor3fv(color[7]);
@@ -876,20 +850,384 @@ void _speedmeter() {
 	glEnd();
 }
 
-void _display() {
+//
+//void _display() {
+//
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glLoadIdentity();
+//
+//	_speedmeter();
+//
+//	glColor3fv(color[0]);
+//	_output(0, 8, message);
+//
+//	glPushMatrix();
+//	glRotatef(25.0 + p, 1.0, 0.0, 0.0);
+//	glRotatef(-30.0 + q, 0.0, 1.0, 0.0);
+//	glRotatef(0.0 + r, 0.0, 0.0, 1.0);
+//
+//
+//	if (rotation == 0)
+//	{
+//
+//		_colorcube1();
+//		_colorcube2();
+//		_colorcube3();
+//		_colorcube4();
+//		_colorcube5();
+//		_colorcube6();
+//		_colorcube7();
+//		_colorcube8();
+//		_colorcube9();
+//		_colorcube10();
+//		_colorcube11();
+//		_colorcube12();
+//		_colorcube13();
+//		_colorcube14();
+//		_colorcube15();
+//		_colorcube16();
+//		_colorcube17();
+//		_colorcube18();
+//		_colorcube19();
+//		_colorcube20();
+//		_colorcube21();
+//		_colorcube22();
+//		_colorcube23();
+//		_colorcube24();
+//		_colorcube25();
+//		_colorcube26();
+//		_colorcube27();
+//	}
+//	if (rotation == 1)
+//	{
+//
+//
+//		_colorcube1();
+//		_colorcube2();
+//		_colorcube3();
+//		_colorcube4();
+//		_colorcube6();
+//		_colorcube7();
+//		_colorcube12();
+//		_colorcube13();
+//		_colorcube14();
+//		_colorcube15();
+//		_colorcube20();
+//		_colorcube21();
+//		_colorcube22();
+//		_colorcube23();
+//		_colorcube24();
+//		_colorcube25();
+//		_colorcube26();
+//		_colorcube27();
+//
+//		if (inverse == 0)
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "Top");
+//			glPopMatrix();
+//			glRotatef(-theta, 0.0, 1.0, 0.0);
+//		}
+//		else
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "TopInverted");
+//			glPopMatrix();
+//			glRotatef(theta, 0.0, 1.0, 0.0);
+//		}
+//		_colorcube5();
+//		_colorcube8();
+//		_colorcube9();
+//		_colorcube10();
+//		_colorcube11();
+//		_colorcube16();
+//		_colorcube17();
+//		_colorcube18();
+//		_colorcube19();
+//
+//	}
+//
+//	if (rotation == 2)
+//	{
+//		_colorcube1();
+//		_colorcube2();
+//		_colorcube3();
+//		_colorcube5();
+//		_colorcube6();
+//		_colorcube7();
+//		_colorcube8();
+//		_colorcube10();
+//		_colorcube11();
+//		_colorcube12();
+//		_colorcube14();
+//		_colorcube15();
+//		_colorcube16();
+//		_colorcube17();
+//		_colorcube20();
+//		_colorcube21();
+//		_colorcube24();
+//		_colorcube25();
+//		if (inverse == 0)
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "Right");
+//			glPopMatrix();
+//			glRotatef(-theta, 1.0, 0.0, 0.0);
+//		}
+//		else
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "RightInverted");
+//			glPopMatrix();
+//			glRotatef(theta, 1.0, 0.0, 0.0);
+//		}
+//		_colorcube4();
+//		_colorcube9();
+//		_colorcube13();
+//		_colorcube18();
+//		_colorcube19();
+//		_colorcube22();
+//		_colorcube23();
+//		_colorcube26();
+//		_colorcube27();
+//	}
+//
+//
+//
+//	if (rotation == 3)
+//	{
+//		_colorcube1();
+//		_colorcube2();
+//		_colorcube3();
+//		_colorcube4();
+//		_colorcube5();
+//		_colorcube7();
+//		_colorcube8();
+//		_colorcube9();
+//		_colorcube11();
+//		_colorcube12();
+//		_colorcube13();
+//		_colorcube15();
+//		_colorcube16();
+//		_colorcube18();
+//		_colorcube20();
+//		_colorcube22();
+//		_colorcube24();
+//		_colorcube26();
+//		if (inverse == 0)
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "Front");
+//			glPopMatrix();
+//			glRotatef(-theta, 0.0, 0.0, 1.0);
+//		}
+//
+//		else
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "FrontInverted");
+//			glPopMatrix();
+//			glRotatef(theta, 0.0, 0.0, 1.0);
+//		}
+//
+//		_colorcube6();
+//		_colorcube10();
+//		_colorcube14();
+//		_colorcube17();
+//		_colorcube19();
+//		_colorcube21();
+//		_colorcube23();
+//		_colorcube25();
+//		_colorcube27();
+//	}
+//
+//	if (rotation == 4)
+//	{
+//		_colorcube1();
+//		_colorcube2();
+//		_colorcube4();
+//		_colorcube5();
+//		_colorcube6();
+//		_colorcube7();
+//		_colorcube9();
+//		_colorcube10();
+//		_colorcube11();
+//		_colorcube13();
+//		_colorcube14();
+//		_colorcube15();
+//		_colorcube18();
+//		_colorcube19();
+//		_colorcube22();
+//		_colorcube23();
+//		_colorcube26();
+//		_colorcube27();
+//		if (inverse == 0)
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "Left");
+//			glPopMatrix();
+//			glRotatef(theta, 1.0, 0.0, 0.0);
+//		}
+//		else
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "LeftInverted");
+//			glPopMatrix();
+//			glRotatef(-theta, 1.0, 0.0, 0.0);
+//		}
+//		_colorcube3();
+//		_colorcube8();
+//		_colorcube12();
+//		_colorcube16();
+//		_colorcube17();
+//		_colorcube20();
+//		_colorcube21();
+//		_colorcube24();
+//		_colorcube25();
+//	}
+//
+//
+//	if (rotation == 5)
+//	{
+//		_colorcube1();
+//		_colorcube2();
+//		_colorcube3();
+//		_colorcube4();
+//		_colorcube5();
+//		_colorcube6();
+//		_colorcube8();
+//		_colorcube9();
+//		_colorcube10();
+//		_colorcube12();
+//		_colorcube13();
+//		_colorcube14();
+//		_colorcube17();
+//		_colorcube19();
+//		_colorcube21();
+//		_colorcube23();
+//		_colorcube25();
+//		_colorcube27();
+//		if (inverse == 0)
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "Back");
+//			glPopMatrix();
+//			glRotatef(theta, 0.0, 0.0, 1.0);
+//
+//		}
+//		else
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "BackInverted");
+//			glPopMatrix();
+//			glRotatef(-theta, 0.0, 0.0, 1.0);
+//		}
+//		_colorcube7();
+//		_colorcube11();
+//		_colorcube15();
+//		_colorcube16();
+//		_colorcube18();
+//		_colorcube20();
+//		_colorcube22();
+//		_colorcube24();
+//		_colorcube26();
+//	}
+//
+//	if (rotation == 6)
+//	{
+//		_colorcube1();
+//		_colorcube3();
+//		_colorcube4();
+//		_colorcube5();
+//		_colorcube6();
+//		_colorcube7();
+//		_colorcube8();
+//		_colorcube9();
+//		_colorcube10();
+//		_colorcube11();
+//		_colorcube16();
+//		_colorcube17();
+//		_colorcube18();
+//		_colorcube19();
+//		_colorcube20();
+//		_colorcube21();
+//		_colorcube22();
+//		_colorcube23();
+//
+//		if (inverse == 0)
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "Bottom");
+//			glPopMatrix();
+//			glRotatef(theta, 0.0, 1.0, 0.0);
+//		}
+//		else
+//		{
+//			glPushMatrix();
+//			glColor3fv(color[0]);
+//			_output(-11, 6, "BottomInverted");
+//			glPopMatrix();
+//
+//			glRotatef(-theta, 0.0, 1.0, 0.0);
+//		}
+//		_colorcube2();
+//		_colorcube12();
+//		_colorcube13();
+//		_colorcube14();
+//		_colorcube15();
+//		_colorcube24();
+//		_colorcube25();
+//		_colorcube26();
+//		_colorcube27();
+//
+//	}
+//	glPopMatrix();
+//
+//
+//	/*glPushMatrix();
+//	glTranslatef(-.5,-4,0);
+//	glScalef(speed/4.5,1.0,1.0);
+//	glTranslatef(0.5,4,0);
+//	polygon(5,216,217,218,219);
+//
+//	glPopMatrix();
+//	*/
+//
+//	glFlush();
+//	glutSwapBuffers();
+//}//TODO:reomove this display function
+void _display()
+
+{
+
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Sleep(2000);
+
 	glLoadIdentity();
 
-	_speedmeter();
+	/*speedmeter();
 
 	glColor3fv(color[0]);
-	_output(0, 8, message);
+	output(0, 8, message);*/
 
-	glPushMatrix();
-	glRotatef(25.0 + p, 1.0, 0.0, 0.0);
-	glRotatef(-30.0 + q, 0.0, 1.0, 0.0);
-	glRotatef(0.0 + r, 0.0, 0.0, 1.0);
+	//glPushMatrix();
+
+	glRotatef(25.0 + p/*50.0*/, 1.0, 0.0, 0.0);
+	glRotatef(-30.0 + q/*-60.0*/, 0.0, 1.0, 0.0);
+	//glRotatef(0.0 + r, 0.0, 0.0, 1.0);
 
 
 	if (rotation == 0)
@@ -948,29 +1286,50 @@ void _display() {
 
 		if (inverse == 0)
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "Top");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(-theta, 0.0, 1.0, 0.0);
+			if (var == 0) system("b.exe");
+			_colorcube5();
+			_colorcube8();
+			_colorcube9();
+			_colorcube10();
+			_colorcube11();
+			_colorcube16();
+			_colorcube17();
+			_colorcube18();
+			_colorcube19();
 		}
 		else
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "TopInverted");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(theta, 0.0, 1.0, 0.0);
+			if (var == 0) system("b.exe");
+
+			_colorcube5();
+			_colorcube8();
+			_colorcube9();
+			_colorcube10();
+			_colorcube11();
+			_colorcube16();
+			_colorcube17();
+			_colorcube18();
+			_colorcube19();
 		}
-		_colorcube5();
-		_colorcube8();
-		_colorcube9();
-		_colorcube10();
-		_colorcube11();
-		_colorcube16();
-		_colorcube17();
-		_colorcube18();
-		_colorcube19();
+		//colorcube5();
+		//colorcube8();
+		//colorcube9();
+		//colorcube10();
+		//colorcube11();
+		//colorcube16();
+		//colorcube17();
+		//colorcube18();
+		//colorcube19();
 
 	}
 
@@ -996,29 +1355,50 @@ void _display() {
 		_colorcube25();
 		if (inverse == 0)
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "Right");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(-theta, 1.0, 0.0, 0.0);
+			if (var == 0) system("b.exe");
+			_colorcube4();
+			_colorcube9();
+			_colorcube13();
+			_colorcube18();
+			_colorcube19();
+			_colorcube22();
+			_colorcube23();
+			_colorcube26();
+			_colorcube27();
 		}
 		else
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "RightInverted");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(theta, 1.0, 0.0, 0.0);
+			if (var == 0) system("b.exe");
+			_colorcube4();
+			_colorcube9();
+			_colorcube13();
+			_colorcube18();
+			_colorcube19();
+			_colorcube22();
+			_colorcube23();
+			_colorcube26();
+			_colorcube27();
 		}
-		_colorcube4();
-		_colorcube9();
-		_colorcube13();
-		_colorcube18();
-		_colorcube19();
-		_colorcube22();
-		_colorcube23();
-		_colorcube26();
-		_colorcube27();
+		//colorcube4();
+		//colorcube9();
+		//colorcube13();
+		//colorcube18();
+		//colorcube19();
+		//colorcube22();
+		//colorcube23();
+		//colorcube26();
+		//colorcube27();
+		//Sleep(1000);
 	}
 
 
@@ -1045,31 +1425,51 @@ void _display() {
 		_colorcube26();
 		if (inverse == 0)
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "Front");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(-theta, 0.0, 0.0, 1.0);
+			if (var == 0) system("b.exe");
+			_colorcube6();
+			_colorcube10();
+			_colorcube14();
+			_colorcube17();
+			_colorcube19();
+			_colorcube21();
+			_colorcube23();
+			_colorcube25();
+			_colorcube27();
 		}
 
 		else
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "FrontInverted");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(theta, 0.0, 0.0, 1.0);
+			if (var == 0) system("b.exe");
+			_colorcube6();
+			_colorcube10();
+			_colorcube14();
+			_colorcube17();
+			_colorcube19();
+			_colorcube21();
+			_colorcube23();
+			_colorcube25();
+			_colorcube27();
 		}
 
-		_colorcube6();
-		_colorcube10();
-		_colorcube14();
-		_colorcube17();
-		_colorcube19();
-		_colorcube21();
-		_colorcube23();
-		_colorcube25();
-		_colorcube27();
+		//colorcube6();
+		//colorcube10();
+		//colorcube14();
+		//colorcube17();
+		//colorcube19();
+		//colorcube21();
+		//colorcube23();
+		//colorcube25();
+		//colorcube27();
 	}
 
 	if (rotation == 4)
@@ -1094,29 +1494,49 @@ void _display() {
 		_colorcube27();
 		if (inverse == 0)
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "Left");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(theta, 1.0, 0.0, 0.0);
+			if (var == 0) system("b.exe");
+			_colorcube3();
+			_colorcube8();
+			_colorcube12();
+			_colorcube16();
+			_colorcube17();
+			_colorcube20();
+			_colorcube21();
+			_colorcube24();
+			_colorcube25();
 		}
 		else
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "LeftInverted");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(-theta, 1.0, 0.0, 0.0);
+			if (var == 0) system("b.exe");
+			_colorcube3();
+			_colorcube8();
+			_colorcube12();
+			_colorcube16();
+			_colorcube17();
+			_colorcube20();
+			_colorcube21();
+			_colorcube24();
+			_colorcube25();
 		}
-		_colorcube3();
-		_colorcube8();
-		_colorcube12();
-		_colorcube16();
-		_colorcube17();
-		_colorcube20();
-		_colorcube21();
-		_colorcube24();
-		_colorcube25();
+		//colorcube3();
+		//colorcube8();
+		//colorcube12();
+		//colorcube16();
+		//colorcube17();
+		//colorcube20();
+		//colorcube21();
+		//colorcube24();
+		//colorcube25();
 	}
 
 
@@ -1142,30 +1562,50 @@ void _display() {
 		_colorcube27();
 		if (inverse == 0)
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "Back");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(theta, 0.0, 0.0, 1.0);
+			if (var == 0) system("b.exe");
+			_colorcube7();
+			_colorcube11();
+			_colorcube15();
+			_colorcube16();
+			_colorcube18();
+			_colorcube20();
+			_colorcube22();
+			_colorcube24();
+			_colorcube26();
 
 		}
 		else
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "BackInverted");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(-theta, 0.0, 0.0, 1.0);
+			if (var == 0) system("b.exe");
+			_colorcube7();
+			_colorcube11();
+			_colorcube15();
+			_colorcube16();
+			_colorcube18();
+			_colorcube20();
+			_colorcube22();
+			_colorcube24();
+			_colorcube26();
 		}
-		_colorcube7();
-		_colorcube11();
-		_colorcube15();
-		_colorcube16();
-		_colorcube18();
-		_colorcube20();
-		_colorcube22();
-		_colorcube24();
-		_colorcube26();
+		//colorcube7();
+		//colorcube11();
+		//colorcube15();
+		//colorcube16();
+		//colorcube18();
+		//colorcube20();
+		//colorcube22();
+		//colorcube24();
+		//colorcube26();
 	}
 
 	if (rotation == 6)
@@ -1191,33 +1631,53 @@ void _display() {
 
 		if (inverse == 0)
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "Bottom");
-			glPopMatrix();
+			//glPopMatrix();
 			glRotatef(theta, 0.0, 1.0, 0.0);
+			if (var == 0) system("b.exe");
+			_colorcube2();
+			_colorcube12();
+			_colorcube13();
+			_colorcube14();
+			_colorcube15();
+			_colorcube24();
+			_colorcube25();
+			_colorcube26();
+			_colorcube27();
 		}
 		else
 		{
-			glPushMatrix();
+			//glPushMatrix();
 			glColor3fv(color[0]);
 			_output(-11, 6, "BottomInverted");
-			glPopMatrix();
+			//glPopMatrix();
 
 			glRotatef(-theta, 0.0, 1.0, 0.0);
+			if (var == 0) system("b.exe");
+			_colorcube2();
+			_colorcube12();
+			_colorcube13();
+			_colorcube14();
+			_colorcube15();
+			_colorcube24();
+			_colorcube25();
+			_colorcube26();
+			_colorcube27();
 		}
-		_colorcube2();
-		_colorcube12();
-		_colorcube13();
-		_colorcube14();
-		_colorcube15();
-		_colorcube24();
-		_colorcube25();
-		_colorcube26();
-		_colorcube27();
+		//colorcube2();
+		//colorcube12();
+		//colorcube13();
+		//colorcube14();
+		//colorcube15();
+		//colorcube24();
+		//colorcube25();
+		//colorcube26();
+		//colorcube27();
 
 	}
-	glPopMatrix();
+	//glPopMatrix();
 
 
 	/*glPushMatrix();
@@ -1231,6 +1691,7 @@ void _display() {
 
 	glFlush();
 	glutSwapBuffers();
+
 }
 
 void _transpose(char a) {
@@ -1346,7 +1807,6 @@ void _topc()
 	left[0][2] = temp3;
 
 }
-
 void _frontc()
 {
 	_transpose('f');
@@ -1370,7 +1830,6 @@ void _frontc()
 	top[2][1] = temp2;
 	top[2][0] = temp3;
 }
-
 void _rightc()
 {
 	_transpose('r');
@@ -1396,7 +1855,6 @@ void _rightc()
 	back[0][0] = temp3;
 
 }
-
 void _leftc()
 {
 	_transpose('l');
@@ -1421,7 +1879,6 @@ void _leftc()
 	bottom[1][0] = temp2;
 	bottom[2][0] = temp3;
 }
-
 void _backc()
 {
 	_transpose('k');
@@ -1445,7 +1902,6 @@ void _backc()
 	left[1][0] = temp2;
 	left[0][0] = temp3;
 }
-
 void _bottomc()
 {
 	_transpose('b');
@@ -1474,7 +1930,7 @@ void _bottomc()
 void _spincube()
 
 {
-	theta += 0.5 + speed;
+	theta += 0.8+ speed;
 	if (theta == 360.0)
 		theta -= 360.0;
 	if (theta >= 90.0)
@@ -1592,238 +2048,394 @@ void _mouse(int btn, int state, int x, int y)
 
 }
 
+///*static*/ void _keyboard(unsigned char key, int x, int y)
+//{
+//	if (key == 'a'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 1;
+//		inverse = 0;
+//		solve[++count] = 1;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//	if (key == 'q'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 1;
+//		inverse = 1;
+//		solve[++count] = -1;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//	if (key == 's'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 2;
+//		inverse = 0;
+//		solve[++count] = 2;
+//		glutIdleFunc(_spincube);
+//	}
+//	if (key == 'w'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 2;
+//		inverse = 1;
+//		solve[++count] = -2;
+//		glutIdleFunc(_spincube);
+//	}
+//	if (key == 'd'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 3;
+//		inverse = 0;
+//		solve[++count] = 3;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//	if (key == 'e'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 3;
+//		inverse = 1;
+//		solve[++count] = -3;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//
+//	if (key == 'f'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 4;
+//		inverse = 0;
+//		solve[++count] = 4;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//	if (key == 'r'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 4;
+//		inverse = 1;
+//		solve[++count] = -4;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//	if (key == 'g'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 5;
+//		inverse = 0;
+//		solve[++count] = 5;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//	if (key == 't'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 5;
+//		inverse = 1;
+//		solve[++count] = -5;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//
+//	if (key == 'h'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 6;
+//		inverse = 0;
+//		solve[++count] = 6;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//
+//	if (key == 'y'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		rotation = 6;
+//		inverse = 1;
+//		solve[++count] = -6;
+//		glutIdleFunc(_spincube);
+//
+//	}
+//	if (key == '2'&&rotationcomplete == 1)
+//	{
+//		p = p + 2.0;
+//		glutIdleFunc(_spincube);
+//	}
+//	if (key == '8'&&rotationcomplete == 1)
+//	{
+//		p = p - 2.0;
+//		glutIdleFunc(_spincube);
+//	}
+//	if (key == '6'&&rotationcomplete == 1)
+//	{
+//		q = q + 2.0;
+//		glutIdleFunc(_spincube);
+//	}
+//	if (key == '4'&&rotationcomplete == 1)
+//	{
+//		q = q - 2.0;
+//		glutIdleFunc(_spincube);
+//	}
+//
+//	if (key == '9'&&rotationcomplete == 1)
+//	{
+//		r = r + 2.0;
+//		glutIdleFunc(_spincube);
+//	}
+//
+//	if (key == '1'&&rotationcomplete == 1)
+//	{
+//		r = r - 2.0;
+//		glutIdleFunc(_spincube);
+//	}
+//	if (key == '5'&&rotationcomplete == 1)
+//	{
+//		p = 0.0;
+//		q = 0.0;
+//		r = 0.0;
+//		glutIdleFunc(_spincube);
+//	}
+//
+//	if (key == 'm'&&rotationcomplete == 1)
+//	{
+//		if (speed <= 1.3)
+//		{
+//			//for(speed=0;speed<1.3;speed++)
+//
+//			speed = speed + 0.3;
+//			speedmetercolor[++speedmetercount] = 3;
+//
+//		}
+//		glutPostRedisplay();
+//	}
+//	if (key == 'm'&&rotationcomplete == 1)
+//	{
+//		if (speed>1.3)
+//		{
+//			if (speed <= 2.9)
+//			{
+//				//for(speed=0;speed<1.3;speed++)
+//
+//				speed = speed + 0.3;
+//				speedmetercolor[++speedmetercount] = 4;
+//			}
+//		}
+//		glutPostRedisplay();
+//	}
+//	if (key == 'm'&&rotationcomplete == 1)
+//	{
+//
+//		if (speed>2.9)
+//		{
+//			if (speed <= 4.2)
+//			{
+//				//r(speed=0;speed<=4.3;speed+=0.1)
+//				//{
+//				speed = speed + 0.3;
+//				speedmetercolor[++speedmetercount] = 5;
+//			}
+//		}
+//		glutPostRedisplay();
+//	}
+//	if (key == 'n'&&rotationcomplete == 1)
+//	{
+//		if (speed >= 0.3)
+//		{
+//			speed = speed - 0.3;
+//			speedmetercolor[speedmetercount--] = 0;
+//		}
+//		glutPostRedisplay();
+//
+//	}
+//
+//
+//	if (key == 'o'&&rotationcomplete == 1)
+//	{
+//		rotationcomplete = 0;
+//		if (count >= 0)
+//		{
+//			if (solve[count]<0)
+//			{
+//				rotation = -1 * solve[count];
+//				inverse = 0;
+//				glutIdleFunc(_spincube);
+//			}
+//			if (solve[count]>0)
+//			{
+//				rotation = solve[count];
+//				inverse = 1;
+//				glutIdleFunc(_spincube);
+//			}
+//
+//
+//			count--;
+//		}
+//
+//
+//		glutIdleFunc(_spincube);
+//
+//
+//	}
+//
+//}
+
 static void _keyboard(unsigned char key, int x, int y)
 {
-	if (key == 'a'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 1;
-		inverse = 0;
-		solve[++count] = 1;
-		glutIdleFunc(_spincube);
+	if (key == 'b') {
 
-	}
-	if (key == 'q'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 1;
-		inverse = 1;
-		solve[++count] = -1;
-		glutIdleFunc(_spincube);
+		if (rotationcomplete == 1) {
 
-	}
-	if (key == 's'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 2;
-		inverse = 0;
-		solve[++count] = 2;
-		glutIdleFunc(_spincube);
-	}
-	if (key == 'w'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 2;
-		inverse = 1;
-		solve[++count] = -2;
-		glutIdleFunc(_spincube);
-	}
-	if (key == 'd'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 3;
-		inverse = 0;
-		solve[++count] = 3;
-		glutIdleFunc(_spincube);
+			rotationcomplete = 0;
 
-	}
-	if (key == 'e'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 3;
-		inverse = 1;
-		solve[++count] = -3;
-		glutIdleFunc(_spincube);
+			switch (movesString[index]) {
 
-	}
+			case 'U':
+				if (movesString[index + 1] == '\'') {
+					rotation = 1;
+					inverse = 1;
+					solve[++count] = -1;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					index++;
+					break;
+				}
+				else {
+					rotation = 1;
+					inverse = 0;
+					solve[++count] = 1;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					break;
+				}
 
-	if (key == 'f'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 4;
-		inverse = 0;
-		solve[++count] = 4;
-		glutIdleFunc(_spincube);
 
-	}
-	if (key == 'r'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 4;
-		inverse = 1;
-		solve[++count] = -4;
-		glutIdleFunc(_spincube);
+			case 'R':
+				if (movesString[index + 1] == '\'') {
+					rotation = 2;
+					inverse = 1;
+					solve[++count] = -2;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					index++;
+					break;
+				}
+				else {
+					rotation = 2;
+					inverse = 0;
+					solve[++count] = 2;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					break;
 
-	}
-	if (key == 'g'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 5;
-		inverse = 0;
-		solve[++count] = 5;
-		glutIdleFunc(_spincube);
+				}
 
-	}
-	if (key == 't'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 5;
-		inverse = 1;
-		solve[++count] = -5;
-		glutIdleFunc(_spincube);
 
-	}
+			case 'F':
+				if (movesString[index + 1] == '\'') {
+					rotation = 3;
+					inverse = 1;
+					solve[++count] = -3;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					index++;
+					break;
+				}
+				else {
+					rotation = 3;
+					inverse = 0;
+					solve[++count] = 3;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					break;
 
-	if (key == 'h'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 6;
-		inverse = 0;
-		solve[++count] = 6;
-		glutIdleFunc(_spincube);
+				}
 
-	}
 
-	if (key == 'y'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		rotation = 6;
-		inverse = 1;
-		solve[++count] = -6;
-		glutIdleFunc(_spincube);
+			case 'L':
+				if (movesString[index + 1] == '\'') {
+					rotation = 4;
+					inverse = 1;
+					solve[++count] = -4;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					index++;
+					break;
+				}
+				else {
 
-	}
-	if (key == '2'&&rotationcomplete == 1)
-	{
-		p = p + 2.0;
-		glutIdleFunc(_spincube);
-	}
-	if (key == '8'&&rotationcomplete == 1)
-	{
-		p = p - 2.0;
-		glutIdleFunc(_spincube);
-	}
-	if (key == '6'&&rotationcomplete == 1)
-	{
-		q = q + 2.0;
-		glutIdleFunc(_spincube);
-	}
-	if (key == '4'&&rotationcomplete == 1)
-	{
-		q = q - 2.0;
-		glutIdleFunc(_spincube);
-	}
+					rotation = 4;
+					inverse = 0;
+					solve[++count] = 4;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					break;
+				}
 
-	if (key == '9'&&rotationcomplete == 1)
-	{
-		r = r + 2.0;
-		glutIdleFunc(_spincube);
-	}
 
-	if (key == '1'&&rotationcomplete == 1)
-	{
-		r = r - 2.0;
-		glutIdleFunc(_spincube);
-	}
-	if (key == '5'&&rotationcomplete == 1)
-	{
-		p = 0.0;
-		q = 0.0;
-		r = 0.0;
-		glutIdleFunc(_spincube);
-	}
+			case 'B':
+				if (movesString[index + 1] == '\'') {
+					rotation = 5;
+					inverse = 1;
+					solve[++count] = -5;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					index++;
+					break;
+				}
+				else {
 
-	if (key == 'm'&&rotationcomplete == 1)
-	{
-		if (speed <= 1.3)
-		{
-			//for(speed=0;speed<1.3;speed++)
+					rotation = 5;
+					inverse = 0;
+					solve[++count] = 5;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					break;
+				}
 
-			speed = speed + 0.3;
-			speedmetercolor[++speedmetercount] = 3;
+			case 'D':
+				if (movesString[index + 1] == '\'') {
+					rotation = 6;
+					inverse = 1;
+					solve[++count] = -6;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					index++;
+					break;
+				}
+				else {
 
-		}
-		glutPostRedisplay();
-	}
-	if (key == 'm'&&rotationcomplete == 1)
-	{
-		if (speed>1.3)
-		{
-			if (speed <= 2.9)
-			{
-				//for(speed=0;speed<1.3;speed++)
+					rotation = 6;
+					inverse = 0;
+					solve[++count] = 6;
+					glutIdleFunc(_spincube);
+					index++;
+					index++;
+					break;
+				}
 
-				speed = speed + 0.3;
-				speedmetercolor[++speedmetercount] = 4;
+			default:
+				rotation = 0;
 			}
 		}
-		glutPostRedisplay();
-	}
-	if (key == 'm'&&rotationcomplete == 1)
-	{
 
-		if (speed>2.9)
-		{
-			if (speed <= 4.2)
-			{
-				//r(speed=0;speed<=4.3;speed+=0.1)
-				//{
-				speed = speed + 0.3;
-				speedmetercolor[++speedmetercount] = 5;
-			}
-		}
-		glutPostRedisplay();
-	}
-	if (key == 'n'&&rotationcomplete == 1)
-	{
-		if (speed >= 0.3)
-		{
-			speed = speed - 0.3;
-			speedmetercolor[speedmetercount--] = 0;
-		}
-		glutPostRedisplay();
+		if (key == 'p') { speed = speed + 1; }
+		if (key == 'l') { speed = speed - 1; }
 
 	}
-
-
-	if (key == 'o'&&rotationcomplete == 1)
-	{
-		rotationcomplete = 0;
-		if (count >= 0)
-		{
-			if (solve[count]<0)
-			{
-				rotation = -1 * solve[count];
-				inverse = 0;
-				glutIdleFunc(_spincube);
-			}
-			if (solve[count]>0)
-			{
-				rotation = solve[count];
-				inverse = 1;
-				glutIdleFunc(_spincube);
-			}
-
-
-			count--;
-		}
-
-
-		glutIdleFunc(_spincube);
-
-
-	}
-
 }
 
 void _myreshape(int w, int h)
@@ -2030,16 +2642,27 @@ void drawRubiksCube::drawCube(int argc, char* argv[], /*char*/ int* colourArray,
 
 	singMasterFile.close();
 
+	//run the optimal solver.
+	system("OptimalCubeSolver.exe");
+
+	//read the solution generated by the algorithm into a string
+	std::ifstream moves;
+	moves.open("Moves.txt");
+	std::getline(moves, movesString);
+	moves.close();
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(500, 500);
 	glutCreateWindow("RUBIK'S CUBE");
+	glEnable(GL_DEPTH_TEST);
 	glutReshapeFunc(_myreshape);
 	glutIdleFunc(_spincube);
-	glutMouseFunc(_mouse);
+	glutKeyboardFunc(_keyboard);
+	//glutMouseFunc(_mouse);
 	glutMotionFunc(_motion);
-	glutCreateMenu(_mymenu);
-	glutAddMenuEntry("Top                   :a", 1);
+	//glutCreateMenu(_mymenu);
+	/*glutAddMenuEntry("Top                   :a", 1);
 	glutAddMenuEntry("Top Inverted    :q", 2);
 	glutAddMenuEntry("Right                 :s", 3);
 	glutAddMenuEntry("Right Inverted  :w", 4);
@@ -2053,11 +2676,20 @@ void drawRubiksCube::drawCube(int argc, char* argv[], /*char*/ int* colourArray,
 	glutAddMenuEntry("Bottom Inverted :y", 12);
 
 	glutAddMenuEntry("Exit", 13);
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
-
+	glutAttachMenu(GLUT_RIGHT_BUTTON);*/
+	/////////////////////////////////////
+	//printf("%s", "what?");
+	//_keyboard('q', 250, 25);
+	//_keyboard('a', 250, 25);
+	//_keyboard('w', 250, 25);
+	//_keyboard('e', 250, 25);
 	glutKeyboardFunc(_keyboard);
 	glutDisplayFunc(_display);
-	glEnable(GL_DEPTH_TEST);
+	
+	///////////////////////////////////////
+	
+	//glutDisplayFunc(_display);
+	//glEnable(GL_DEPTH_TEST);
 	glutMainLoop();
 	//return 0;
 }
